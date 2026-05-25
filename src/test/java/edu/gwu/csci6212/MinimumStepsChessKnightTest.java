@@ -1,66 +1,38 @@
 package edu.gwu.csci6212;
-import static org.junit.Assert.assertEquals;
 
-import org.junit.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import org.junit.jupiter.api.Test;
 
-public class MinimumStepsChessKnightTest {
-    static MinimumStepsChessKnight myGame;
+class MinimumStepsChessKnightTest {
 
     @Test
-    public void  doesNotAcceptCoordinatesOutOfBounds(){
-        int size = 7;
-        int[] start = new int[]{7, 5};
-        int[] goal = new int[]{1, 1};
-        myGame = new MinimumStepsChessKnight();
-        assertEquals(-1, myGame.startGame(size, start, goal));
+    void returnsMinusOneWhenStartOutOfBounds() {
+        assertEquals(-1, MinimumStepsChessKnight.minSteps(7, 7, 5, 1, 1));
     }
 
     @Test
-    public void  startPositionEqualsGoalPosition(){
-        int size = 7;
-        int[] start = new int[]{1, 1};
-        int[] goal = new int[]{1, 1};
-        myGame = new MinimumStepsChessKnight();
-        assertEquals(0, myGame.startGame(size, start, goal));
-
-
+    void returnsZeroWhenStartEqualsGoal() {
+        assertEquals(0, MinimumStepsChessKnight.minSteps(7, 1, 1, 1, 1));
     }
 
     @Test
-    public void  startIsTwoStepsFromGoal(){
-        int size = 7;
-        int[] start = new int[]{3, 1};
-        int[] goal = new int[]{1, 1};
-        myGame = new MinimumStepsChessKnight();
-        assertEquals(2, myGame.startGame(size, start, goal));
-
-
+    void findsTwoStepPath() {
+        assertEquals(2, MinimumStepsChessKnight.minSteps(7, 3, 1, 1, 1));
     }
-
 
     @Test
-    public void  startIsThreeStepsFromGoal(){
-        int size = 7;
-        int[] start = new int[]{4, 5};
-        int[] goal = new int[]{1, 1};
-        myGame = new MinimumStepsChessKnight();
-        assertEquals(3, myGame.startGame(size, start, goal));
-
-
+    void findsThreeStepPath() {
+        assertEquals(3, MinimumStepsChessKnight.minSteps(7, 4, 5, 1, 1));
     }
-
 
     @Test
-    public void  startIsFourStepsFromGoal(){
-        int size = 7;
-        int[] start = new int[]{1, 1};
-        int[] goal = new int[]{6, 6};
-        myGame = new MinimumStepsChessKnight();
-        assertEquals(4, myGame.startGame(size, start, goal));
-
-
+    void findsFourStepPath() {
+        assertEquals(4, MinimumStepsChessKnight.minSteps(7, 1, 1, 6, 6));
     }
 
-
+    @Test
+    void reachesCornerAtOriginAfterFix() {
+        assertEquals(4, MinimumStepsChessKnight.minSteps(8, 0, 0, 1, 1));
+    }
 }
