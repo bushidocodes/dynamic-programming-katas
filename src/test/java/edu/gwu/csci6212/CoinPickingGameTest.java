@@ -1,58 +1,45 @@
 package edu.gwu.csci6212;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-import edu.gwu.csci6212.CoinPickingGame.IllegalCapacity;
+class CoinPickingGameTest {
 
-public class CoinPickingGameTest {
-    static CoinPickingGame game;
-
-    @Before
-    public void setup() {
-        game = new CoinPickingGame();
-    }
-
-    @Test(expected = IllegalCapacity.class)
-    public void doesNotAcceptAnOddNumberOfCoins() {
-        int coins[] = { 1, 1, 1 };
-        game.setup(coins);
-    }
-
-    @Test(expected = IllegalCapacity.class)
-    public void doesNotAcceptZeroCoins() {
-        int coins[] = {};
-        game.setup(coins);
+    @Test
+    void rejectsOddNumberOfCoins() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new CoinPickingGame(new int[] { 1, 1, 1 }));
     }
 
     @Test
-    public void acceptAnEvenNumberOfCoins() {
-        int coins[] = { 1, 1, 1, 1 };
-        game.setup(coins);
+    void rejectsZeroCoins() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new CoinPickingGame(new int[] {}));
     }
 
     @Test
-    public void playReturnsAPositiveResult() {
-        int coins[] = { 1, 1, 1, 1 };
-        game.setup(coins);
+    void acceptsEvenNumberOfCoins() {
+        new CoinPickingGame(new int[] { 1, 1, 1, 1 });
+    }
+
+    @Test
+    void playReturnsPositiveResult() {
+        CoinPickingGame game = new CoinPickingGame(new int[] { 1, 1, 1, 1 });
         assertTrue(game.play() > 0);
     }
 
     @Test
-    public void optimizesWhenGreedyIsSufficient() {
-        int coins[] = { 5, 3, 7, 10 };
-        game.setup(coins);
+    void optimizesWhenGreedyIsSufficient() {
+        CoinPickingGame game = new CoinPickingGame(new int[] { 5, 3, 7, 10 });
         assertEquals(15, game.play());
     }
 
     @Test
-    public void optimizesWhenGreedyIsInsufficient() {
-        int coins[] = { 8, 15, 3, 7 };
-        game.setup(coins);
+    void optimizesWhenGreedyIsInsufficient() {
+        CoinPickingGame game = new CoinPickingGame(new int[] { 8, 15, 3, 7 });
         assertEquals(22, game.play());
     }
-
 }

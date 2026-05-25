@@ -1,90 +1,44 @@
 package edu.gwu.csci6212;
 
-public class CoinPickingGame {
-    private MemoizationTableCell[][] memoizationTable;
-    private int[] coins;
+public final class CoinPickingGame {
+    private final int[] coins;
+    private final Scores[][] memo;
 
-    private class MemoizationTableCell {
-        public int playerOneScore;
-        public int playerTwoScore;
+    private record Scores(int playerOne, int playerTwo) {}
 
-        MemoizationTableCell(int playerOneScore, int playerTwoScore) {
-            this.playerOneScore = playerOneScore;
-            this.playerTwoScore = playerTwoScore;
+    public CoinPickingGame(int[] coins) {
+        if (coins.length == 0 || coins.length % 2 != 0) {
+            throw new IllegalArgumentException(
+                    "coin count must be a positive even number, was " + coins.length);
         }
+        this.coins = coins.clone();
+        this.memo = new Scores[coins.length][coins.length];
     }
 
-    public void setup(int coins[]) {
-        if (hasOddCount(coins) || isEmpty(coins))
-            throw new IllegalCapacity();
-        this.coins = coins;
-        this.memoizationTable = new MemoizationTableCell[coins.length][coins.length];
+    public int play() {
+        fillMemo();
+        return memo[coins.length - 1][0].playerOne();
     }
 
-    private boolean hasOddCount(int[] coins) {
-        return coins.length % 2 == 1;
-    }
-
-    private boolean isEmpty(int[] coins) {
-        return coins.length == 0;
-    }
-
-    private void calculateMemoizationTable() {
-        calculateMainDiagonal();
-        calculateCells();
-    }
-
-    private void calculateMainDiagonal() {
-        for (int coinIndex = 0; coinIndex < this.coins.length; coinIndex++) {
-            this.memoizationTable[coinIndex][coinIndex] = new MemoizationTableCell(coins[coinIndex], 0);
+    private void fillMemo() {
+        for (int i = 0; i < coins.length; i++) {
+            memo[i][i] = new Scores(coins[i], 0);
         }
-    }
-
-    private void calculateCells() {
-        for (int startBounds = 1; startBounds < this.coins.length; startBounds++) {
-            for (int x = startBounds; x < this.coins.length; x++) {
-                int y = x - startBounds;
-                calculateCell(x, y);
+        for (int span = 1; span < coins.length; span++) {
+            for (int right = span; right < coins.length; right++) {
+                int left = right - span;
+                memo[right][left] = bestChoice(right, left);
             }
         }
     }
 
-    private void calculateCell(int x, int y) {
-        this.memoizationTable[x][y] = calculatePlayerOneScoreFromOneCellDown(x,
-                y) >= calculatePlayerOneScoreFromOneCellLeft(x, y)
-                        ? new MemoizationTableCell(calculatePlayerOneScoreFromOneCellDown(x, y),
-                                calculatePlayerTwoScoreFromOneCellDown(x, y))
-                        : new MemoizationTableCell(calculatePlayerOneScoreFromOneCellLeft(x, y),
-                                calculatePlayerTwoScoreFromOneCellLeft(x, y));
+    private Scores bestChoice(int right, int left) {
+        Scores takeLeft = new Scores(
+                memo[right][left + 1].playerTwo() + coins[left],
+                memo[right][left + 1].playerOne());
+        Scores takeRight = new Scores(
+                memo[right - 1][left].playerTwo() + coins[right],
+                memo[right - 1][left].playerOne());
+        return takeLeft.playerOne() >= takeRight.playerOne() ? takeLeft : takeRight;
     }
-
-    private int calculatePlayerOneScoreFromOneCellDown(int x, int y) {
-        return this.memoizationTable[x][y + 1].playerTwoScore + coins[y];
-    }
-
-    private int calculatePlayerTwoScoreFromOneCellDown(int x, int y) {
-        return this.memoizationTable[x][y + 1].playerOneScore;
-    }
-
-    private int calculatePlayerOneScoreFromOneCellLeft(int x, int y) {
-        return this.memoizationTable[x - 1][y].playerTwoScore + coins[x];
-    }
-
-    private int calculatePlayerTwoScoreFromOneCellLeft(int x, int y) {
-        return this.memoizationTable[x - 1][y].playerOneScore;
-    }
-
-    public int play() {
-        this.calculateMemoizationTable();
-        return this.calculateTotalValue();
-    }
-
-    private int calculateTotalValue() {
-        return this.memoizationTable[this.coins.length - 1][0].playerOneScore;
-    }
-
-    public static class IllegalCapacity extends RuntimeException {
-        private static final long serialVersionUID = 1L;
-    }
-
 }
