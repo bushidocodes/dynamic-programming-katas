@@ -4,7 +4,7 @@ by [Alvaro Albero Gran](https://github.com/albero94), [Sean McBride](https://git
 
 ## About
 
-A dynamic-programming assignment for GWU's CSCI 6212 Design & Analysis of Algorithms. The assignment prompt is in [Coding Project 2.pdf](Coding%20Project%202.pdf).
+A dynamic-programming assignment for GWU's CSCI 6212 Design & Analysis of Algorithms. The assignment prompt is in [ASSIGNMENT.md](ASSIGNMENT.md).
 
 ## Requirements
 
