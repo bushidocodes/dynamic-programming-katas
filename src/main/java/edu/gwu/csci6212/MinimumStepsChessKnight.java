@@ -4,6 +4,17 @@ import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.Queue;
 
+/**
+ * Finds the minimum number of knight moves between two squares on an N×N
+ * chessboard using dynamic programming.
+ *
+ * <p>A 2-D distance table {@code dist[x][y]} is initialised to {@code -1}
+ * (unvisited). Starting from the source square ({@code dist = 0}), the table
+ * is filled in wavefront order: each reachable square records
+ * {@code dist[nx][ny] = dist[cx][cy] + 1}. The queue only drives fill order;
+ * the table itself is the DP state. The answer is {@code dist[goalX][goalY]},
+ * or {@code -1} if the goal is unreachable.
+ */
 public final class MinimumStepsChessKnight {
     private static final int[][] KNIGHT_MOVES = {
             { 1,  2 }, { 1, -2 }, { 2,  1 }, { 2, -1 },
@@ -12,6 +23,21 @@ public final class MinimumStepsChessKnight {
 
     private MinimumStepsChessKnight() {}
 
+    /**
+     * Returns the minimum number of knight moves to travel from
+     * {@code (startX, startY)} to {@code (goalX, goalY)} on a
+     * {@code boardSize × boardSize} chessboard.
+     *
+     * @param boardSize size of the square board; must be a positive integer
+     * @param startX    row of the starting square (0-based)
+     * @param startY    column of the starting square (0-based)
+     * @param goalX     row of the target square (0-based)
+     * @param goalY     column of the target square (0-based)
+     * @return minimum number of moves, {@code 0} if start equals goal, or
+     *         {@code -1} if the start or goal is out of bounds or the goal is
+     *         unreachable
+     * @throws IllegalArgumentException if {@code boardSize} is not positive
+     */
     public static int minSteps(int boardSize, int startX, int startY, int goalX, int goalY) {
         if (boardSize <= 0) {
             throw new IllegalArgumentException(
