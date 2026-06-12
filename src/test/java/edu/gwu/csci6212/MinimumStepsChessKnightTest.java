@@ -35,4 +35,30 @@ class MinimumStepsChessKnightTest {
     void findsFourStepPathFromBoardCorner() {
         assertEquals(4, MinimumStepsChessKnight.minSteps(8, 0, 0, 1, 1));
     }
+
+    @Test
+    void returnsMinusOneWhenGoalOutOfBounds() {
+        assertEquals(-1, MinimumStepsChessKnight.minSteps(7, 1, 1, 7, 5));
+    }
+
+    @Test
+    void findsOneStepPath() {
+        // (0,0) -> (1,2) is a single knight move
+        assertEquals(1, MinimumStepsChessKnight.minSteps(7, 0, 0, 1, 2));
+    }
+
+    @Test
+    void returnsMinusOneWhenGoalUnreachable() {
+        // On a 2x2 board every knight move leaves the board, so no cell other than
+        // the start is reachable; the dist table entry stays -1.
+        assertEquals(-1, MinimumStepsChessKnight.minSteps(2, 0, 0, 1, 1));
+    }
+
+    @Test
+    void pathLengthIsSymmetric() {
+        // The minimum steps from A to B must equal the minimum steps from B to A.
+        int forward = MinimumStepsChessKnight.minSteps(7, 4, 5, 1, 1);
+        int reverse = MinimumStepsChessKnight.minSteps(7, 1, 1, 4, 5);
+        assertEquals(forward, reverse);
+    }
 }
