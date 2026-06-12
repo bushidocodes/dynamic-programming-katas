@@ -32,7 +32,7 @@ class MinimumStepsChessKnightTest {
     }
 
     @Test
-    void reachesCornerAtOriginAfterFix() {
+    void findsFourStepPathFromBoardCorner() {
         assertEquals(4, MinimumStepsChessKnight.minSteps(8, 0, 0, 1, 1));
     }
 }
