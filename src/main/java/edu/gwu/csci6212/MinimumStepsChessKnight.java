@@ -13,6 +13,10 @@ public final class MinimumStepsChessKnight {
     private MinimumStepsChessKnight() {}
 
     public static int minSteps(int boardSize, int startX, int startY, int goalX, int goalY) {
+        if (boardSize <= 0) {
+            throw new IllegalArgumentException(
+                    "boardSize must be a positive integer, was " + boardSize);
+        }
         if (!inBounds(startX, startY, boardSize) || !inBounds(goalX, goalY, boardSize)) {
             return -1;
         }
