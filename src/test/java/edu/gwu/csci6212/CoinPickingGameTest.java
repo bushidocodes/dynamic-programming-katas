@@ -21,6 +21,12 @@ class CoinPickingGameTest {
     }
 
     @Test
+    void rejectsNegativeCoinValue() {
+        assertThrows(IllegalArgumentException.class,
+                () -> new CoinPickingGame(new int[] { 1, -1, 1, 1 }));
+    }
+
+    @Test
     void acceptsEvenNumberOfCoins() {
         new CoinPickingGame(new int[] { 1, 1, 1, 1 });
     }

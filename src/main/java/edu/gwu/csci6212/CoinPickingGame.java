@@ -11,6 +11,12 @@ public final class CoinPickingGame {
             throw new IllegalArgumentException(
                     "coin count must be a positive even number, was " + coins.length);
         }
+        for (int coin : coins) {
+            if (coin < 0) {
+                throw new IllegalArgumentException(
+                        "all coin values must be non-negative, found " + coin);
+            }
+        }
         this.coins = coins.clone();
         this.memo = new Scores[coins.length][coins.length];
     }
