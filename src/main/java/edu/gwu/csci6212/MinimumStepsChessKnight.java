@@ -1,7 +1,8 @@
 package edu.gwu.csci6212;
 
 import java.util.ArrayDeque;
-import java.util.Deque;
+import java.util.Arrays;
+import java.util.Queue;
 
 public final class MinimumStepsChessKnight {
     private static final int[][] KNIGHT_MOVES = {
@@ -9,37 +10,34 @@ public final class MinimumStepsChessKnight {
             { -2, 1 }, { -2, -1 }, { -1,  2 }, { -1, -2 }
     };
 
-    private record Position(int x, int y, int steps) {}
-
     private MinimumStepsChessKnight() {}
 
     public static int minSteps(int boardSize, int startX, int startY, int goalX, int goalY) {
         if (!inBounds(startX, startY, boardSize) || !inBounds(goalX, goalY, boardSize)) {
             return -1;
         }
-        if (startX == goalX && startY == goalY) {
-            return 0;
-        }
 
-        boolean[][] visited = new boolean[boardSize][boardSize];
-        visited[startX][startY] = true;
+        int[][] dist = new int[boardSize][boardSize];
+        for (int[] row : dist) Arrays.fill(row, -1);
+        dist[startX][startY] = 0;
 
-        Deque<Position> queue = new ArrayDeque<>();
-        queue.add(new Position(startX, startY, 0));
+        // Queue drives fill order; dist[][] is the DP state.
+        Queue<int[]> queue = new ArrayDeque<>();
+        queue.add(new int[]{startX, startY});
 
         while (!queue.isEmpty()) {
-            Position curr = queue.remove();
+            int[] curr = queue.remove();
+            int cx = curr[0], cy = curr[1];
             for (int[] move : KNIGHT_MOVES) {
-                int nx = curr.x() + move[0];
-                int ny = curr.y() + move[1];
-                if (!inBounds(nx, ny, boardSize) || visited[nx][ny]) continue;
-                int nextSteps = curr.steps() + 1;
-                if (nx == goalX && ny == goalY) return nextSteps;
-                visited[nx][ny] = true;
-                queue.add(new Position(nx, ny, nextSteps));
+                int nx = cx + move[0];
+                int ny = cy + move[1];
+                if (!inBounds(nx, ny, boardSize) || dist[nx][ny] != -1) continue;
+                dist[nx][ny] = dist[cx][cy] + 1;
+                queue.add(new int[]{nx, ny});
             }
         }
-        return -1;
+
+        return dist[goalX][goalY];
     }
 
     private static boolean inBounds(int x, int y, int size) {
