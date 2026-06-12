@@ -1,10 +1,32 @@
 package edu.gwu.csci6212;
 
+/**
+ * Solves the coin-picking game using dynamic programming.
+ *
+ * <p>Given a row of {@code n} coins (n even), two players alternate turns. On
+ * each turn the active player takes either the leftmost or the rightmost
+ * remaining coin. Both players play optimally. This class computes the maximum
+ * score the first player can guarantee.
+ *
+ * <p>The DP state is a 2-D memo table where {@code memo[right][left]} stores
+ * the (playerOne score, playerTwo score) for the sub-row {@code coins[left..right]}.
+ * Sub-rows of length 1 are base cases; longer sub-rows are built from shorter ones
+ * by choosing whichever end maximises the current player's total.
+ */
 public final class CoinPickingGame {
     private record Scores(int playerOne, int playerTwo) {}
 
     private CoinPickingGame() {}
 
+    /**
+     * Returns the maximum score the first player can guarantee.
+     *
+     * @param coins non-null array of non-negative coin values; length must be a
+     *              positive even number
+     * @return maximum score achievable by the first player under optimal play
+     * @throws IllegalArgumentException if {@code coins} is empty, has odd length,
+     *                                  or contains a negative value
+     */
     public static int maxScore(int[] coins) {
         if (coins.length == 0 || coins.length % 2 != 0) {
             throw new IllegalArgumentException(

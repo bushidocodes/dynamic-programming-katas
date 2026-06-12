@@ -1,22 +1,34 @@
 package edu.gwu.csci6212;
 
+/**
+ * Wildcard pattern matching using dynamic programming.
+ *
+ * <p>A pattern may contain two special characters:
+ * <ul>
+ *   <li>{@code *} — matches any sequence of characters, including the empty sequence</li>
+ *   <li>{@code ?} — matches exactly one arbitrary character</li>
+ * </ul>
+ * All other characters must match literally. The pattern must match the
+ * <em>entire</em> input string (not just a substring).
+ *
+ * <p>The DP state is a 2-D boolean table where {@code dp[i][j]} is {@code true}
+ * iff {@code pattern[0..i-1]} matches {@code text[0..j-1]}. The recurrence is:
+ * <ul>
+ *   <li>{@code '*'}: {@code dp[i][j] = dp[i-1][j] || dp[i][j-1]}
+ *       (star matches empty or one more character)</li>
+ *   <li>{@code '?'} or exact match: {@code dp[i][j] = dp[i-1][j-1]}</li>
+ * </ul>
+ */
 public final class WildcardPatternMatching {
     private WildcardPatternMatching() {}
 
     /**
-     * Returns true if {@code pattern} matches the entire {@code text}.
+     * Returns {@code true} if {@code pattern} matches the entire {@code text}.
      *
-     * <p>The pattern may contain:
-     * <ul>
-     *   <li>{@code *} – matches any sequence of characters (including empty)</li>
-     *   <li>{@code ?} – matches exactly one character</li>
-     *   <li>any other character – must match that character exactly</li>
-     * </ul>
-     *
-     * @param text    the input string to test (must not be null)
-     * @param pattern the wildcard pattern (must not be null)
-     * @return true if the pattern matches the entire text
-     * @throws IllegalArgumentException if text or pattern is null
+     * @param text    the input string to test; must not be null
+     * @param pattern the wildcard pattern; must not be null
+     * @return {@code true} if the pattern matches the entire text
+     * @throws IllegalArgumentException if {@code text} or {@code pattern} is null
      */
     public static boolean matches(String text, String pattern) {
         if (text == null) {
