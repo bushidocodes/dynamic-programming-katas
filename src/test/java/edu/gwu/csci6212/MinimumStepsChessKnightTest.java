@@ -1,10 +1,23 @@
 package edu.gwu.csci6212;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
 class MinimumStepsChessKnightTest {
+
+    @Test
+    void rejectsZeroBoardSize() {
+        assertThrows(IllegalArgumentException.class,
+                () -> MinimumStepsChessKnight.minSteps(0, 0, 0, 0, 0));
+    }
+
+    @Test
+    void rejectsNegativeBoardSize() {
+        assertThrows(IllegalArgumentException.class,
+                () -> MinimumStepsChessKnight.minSteps(-1, 0, 0, 0, 0));
+    }
 
     @Test
     void returnsMinusOneWhenStartOutOfBounds() {
